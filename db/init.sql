@@ -1,0 +1,4 @@
+-- CREATE USER postgres;
+
+CREATE DATABASE nms_db;
+GRANT ALL PRIVILEGES ON DATABASE nms_db TO postgres;

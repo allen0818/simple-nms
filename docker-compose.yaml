@@ -1,0 +1,61 @@
+version: '3.5'
+services:
+  db:
+    image: my_postgres:1.0.0
+    container_name: 'nms-db'
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    networks:
+      - proxy
+
+  api:
+    build: ./api
+    container_name: 'nms-api'
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    env_file: './.env'
+    volumes:
+      - api_data:/api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - proxy
+
+  web:
+    image: 'blog-web'
+    build: './web'
+    container_name: 'nms-web'
+    ports:
+      - 3000:80
+    networks:
+      - proxy
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - proxy
+    restart: always
+
+volumes:
+  api_data:
+  pgdata:
+  pgadmin:
+
+networks:
+  proxy:
+    name: my_network

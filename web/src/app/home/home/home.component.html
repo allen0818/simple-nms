@@ -1,0 +1,41 @@
+<mat-toolbar class="home-header" color="primary">
+  <button mat-icon-button (click)="sideNav.toggle()">
+    <mat-icon>{{ sideNav.opened ? 'close' : 'menu' }}</mat-icon>
+  </button>
+  <span>Simple NMS</span>
+  <span class="toolbar-seperator"></span>
+  <button mat-icon-button>
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="messageMenu">
+    <mat-icon>message</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>exit_to_app</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="custom-sidenav-container">
+  <mat-sidenav opened="true" mode="side" #sideNav>
+    <mat-nav-list>
+      <a [routerLink]="['/', 'home', 'survey']" mat-list-item>問卷調查</a>
+      <a [routerLink]="['/', 'home', 'posts']" mat-list-item>部落格</a>
+      <a [routerLink]="['/', 'home', 'inbox']" mat-list-item>收件夾</a>
+      <mat-divider></mat-divider>
+      <a [routerLink]="['/', 'home', 'demos']" mat-list-item>示範</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <button mat-button (click)="toggleSideNav(sideNav)">切換側邊選單</button>
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<mat-menu #messageMenu="matMenu">
+  <ng-template matMenuContent>
+    <button mat-menu-item>最新訊息</button>
+    <button mat-menu-item>推播設定</button>
+  </ng-template>
+</mat-menu>
