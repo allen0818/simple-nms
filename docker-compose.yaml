@@ -14,7 +14,8 @@ services:
       - proxy
 
   api:
-    build: ./api
+    build: ./nms_api
+    image: my_nms_api:1.0.0
     container_name: 'nms-api'
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     restart: always
@@ -29,7 +30,7 @@ services:
       - proxy
 
   web:
-    image: 'blog-web'
+    image: nms-web:1.0.0
     build: './web'
     container_name: 'nms-web'
     ports:
