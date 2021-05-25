@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'nms_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST', '172.16.100.201'),
+        'PORT': os.environ.get('DB_HOST_PORT', '5432'),
+        'NAME': os.environ.get('DB_NAME', 'nms_db'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'REPLACE_TO_YOURS'),
     }
 }
 
