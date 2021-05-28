@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedMaterialModule } from './shared/shared-material.module';
 import { HomeModule } from './home/home.module';
 import { PostModule } from './post/post.module';
+import { DeviceModule } from './device/device.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { PostModule } from './post/post.module';
     // feature modules
     HomeModule,
     PostModule,
+    DeviceModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
