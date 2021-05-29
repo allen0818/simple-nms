@@ -52,4 +52,10 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     this.dataSource.data = FAKE_DEVICE;
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    // console.log('filter value', filterValue);
+
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
