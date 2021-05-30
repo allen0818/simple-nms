@@ -1,10 +1,11 @@
-import { ThrowStmt } from '@angular/compiler';
 import { ViewChild } from '@angular/core';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Device } from '@app/device/models/device';
+import { DeviceService } from '@app/device/services/device.service';
 
 const FAKE_DEVICE: Device[] = [
   { id: 1, name: 'device1', ip: '192.168.10.1', state: 'linkup' },
@@ -27,7 +28,7 @@ const FAKE_DEVICE: Device[] = [
 export class DeviceListComponent implements OnInit, AfterViewInit {
   devices: Device[] = [];
 
-  displayColumns = ['id', 'name', 'ip', 'state'];
+  displayColumns = ['id', 'name', 'ip', 'state', 'action'];
   dataSource = new MatTableDataSource<Device>();
   
   @ViewChild(MatPaginator)
@@ -37,7 +38,10 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   sort!: MatSort;
 
 
-  constructor() { }
+  constructor(
+    private deviceService: DeviceService,
+    public dialog: MatDialog
+  ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -57,5 +61,40 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     // console.log('filter value', filterValue);
 
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  initDeviceList(newDevices: Device[]): void {
+    this.devices = [];
+    newDevices.forEach(d => {
+      this.devices.push({ ...d });
+    })
+  }
+
+  getAllDevices(): void {
+    this.deviceService.getAll().subscribe(result => {
+      console.log('all devices', result);
+      this.initDeviceList(result);
+      this.loadData();
+    });
+  }
+
+
+  deleteDevice(id: number): void {
+    this.deviceService.delete(id).subscribe(result => {
+      if (result) {
+        console.log('device is deleted !');
+        this.devices = this.devices.filter(d => d.id != id)
+      } else {
+        console.log('failed to delete device.');
+      }
+    })
+  }
+
+  edit(device: Device): void {
+    console.log('edit device', device);
+  }
+
+  delete(id: number): void {
+    console.log(`delete device id:${id}`);
   }
 }

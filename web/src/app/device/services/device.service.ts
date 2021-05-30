@@ -55,12 +55,12 @@ export class DeviceService {
   }  
 
 
-  delete(device: Device): Observable<Device> {
+  delete(device: Device | number): Observable<Device> {
     const id = typeof device == 'number' ? device : device.id;
     const url = `${baseUrl}/${id}`;
     
     return this.http.delete<Device>(url, httpOptions).pipe(
-      tap(_ => console.log(`delete device id=${device.id}`)),
+      tap(_ => console.log(`delete device id=${id}`)),
       catchError(this.handleError<Device>(`updateDevice`))
     )
   }    
