@@ -1,17 +1,16 @@
-<div class="action" fxLayout=row>
+<div fxLayout=row class="action">
     <div fxFlex="10">
-        <button mat-mini-fab color="primary" aria-label="A button with a add icon">
+        <button mat-mini-fab color="primary" (click)="addDevice()" aria-label="A button with a add icon">
             <mat-icon>add</mat-icon>
         </button>
     </div>
+
     <div fxFlex></div>
-    <div fxFlex="30">
+    <div>
         <mat-form-field>
-            <mat-label>Filter</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. device1" #input>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input>
         </mat-form-field>
     </div>
-
 </div>
 
 <div class="container mat-elevation-z8">

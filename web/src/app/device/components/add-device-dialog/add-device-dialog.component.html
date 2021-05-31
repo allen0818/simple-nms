@@ -1,0 +1,21 @@
+<div class="dialog-close" fxLayout="row" fxLayoutAlign="end center">
+  <mat-icon aria-hidden="false" (click)="closeDialog()">cancel</mat-icon>
+</div>
+
+<h2 mat-dialog-title>{{ getDialogTitle() }}</h2>
+<div mat-dialog-content>
+  <mat-card class="mat-elevation-z8">
+    <form class="form-panel" [formGroup]="deviceForm" fxLayout="column">
+      <mat-form-field class='full-width' >
+        <input matInput type='text' formControlName="deviceName" placeholder="Device Name" required>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' >
+        <textarea matInput type='text' formControlName="deviceIp" placeholder="IP Addr."></textarea>
+      </mat-form-field>
+    </form>
+  </mat-card>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+</div>

@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Device } from '@app/device/models/device';
 import { DeviceService } from '@app/device/services/device.service';
+import { AddDeviceDialogComponent } from '../add-device-dialog/add-device-dialog.component';
 
 const FAKE_DEVICE: Device[] = [
   { id: 1, name: 'device1', ip: '192.168.10.1', state: 'linkup' },
@@ -30,7 +31,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   displayColumns = ['id', 'name', 'ip', 'state', 'action'];
   dataSource = new MatTableDataSource<Device>();
-  
+
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -96,5 +97,23 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   delete(id: number): void {
     console.log(`delete device id:${id}`);
+  }
+
+  addDevice(): void {
+    this.openDialog('add', undefined);
+  }
+
+  openDialog(action: string, device?: Device) {
+    const dialogRef = this.dialog.open(AddDeviceDialogComponent, {
+      width: '500px',
+      data: {
+        action: action,
+        device: device
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(_ => {
+      this.getAllDevices();
+    });
   }
 }
