@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Device } from '@app/device/models/device';
 import { DeviceService } from '@app/device/services/device.service';
+import { AlertService } from '@app/shared/services/alert.service';
 import { AddDeviceDialogComponent } from '../add-device-dialog/add-device-dialog.component';
 
 const FAKE_DEVICE: Device[] = [
@@ -41,6 +42,7 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private deviceService: DeviceService,
+    private alertService: AlertService,
     public dialog: MatDialog
   ) { }
 
@@ -100,7 +102,9 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   addDevice(): void {
-    this.openDialog('add', undefined);
+    this.alertService.success('Add device', 'close');
+
+    // this.openDialog('add', undefined);
   }
 
   openDialog(action: string, device?: Device) {
