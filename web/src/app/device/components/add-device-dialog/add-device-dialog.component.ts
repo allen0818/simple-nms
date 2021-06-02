@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Device } from '@app/device/models/device';
 import { DeviceService } from '@app/device/services/device.service';
+import { AlertService } from '@app/shared/services/alert.service';
 
 interface DialogData {
   action: string;
@@ -24,6 +25,7 @@ export class AddDeviceDialogComponent implements OnInit {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<AddDeviceDialogComponent>,
     private deviceService: DeviceService,
+    private alertService: AlertService,
     private formBuilder: FormBuilder
   ) { }
 
@@ -72,10 +74,10 @@ export class AddDeviceDialogComponent implements OnInit {
 
   addDevice(device: Device) {
     this.deviceService.create(device).subscribe(result => {
-      console.log(`add device ${device.name} success.`);
+      this.alertService.success(`add device ${device.name} success.`);
       this.closeDialog(true);
     }, err => {
-      console.error(`add device ${device.name} failed.`);
+      this.alertService.error(`add device ${device.name} failed.`);
       console.error(err);
     });
   }

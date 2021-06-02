@@ -5,17 +5,17 @@ import { catchError, tap, map } from 'rxjs/operators';
 
 import { Device } from '../models/device';
 
-const baseUrl = '/api/v1/devices';
+const baseUrl = '/api/v1/devices/';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};  
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceService {
-  
+
   constructor(private http: HttpClient) { }
 
   private handleError<T> (operation = 'operation', result?: T) {
@@ -52,16 +52,16 @@ export class DeviceService {
       tap(_ => console.log(`create device id=${device.id}`)),
       catchError(this.handleError<Device>(`updateDevice`))
     )
-  }  
+  }
 
 
   delete(device: Device | number): Observable<Device> {
     const id = typeof device == 'number' ? device : device.id;
     const url = `${baseUrl}/${id}`;
-    
+
     return this.http.delete<Device>(url, httpOptions).pipe(
       tap(_ => console.log(`delete device id=${id}`)),
       catchError(this.handleError<Device>(`updateDevice`))
     )
-  }    
+  }
 }

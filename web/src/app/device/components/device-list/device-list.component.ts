@@ -102,11 +102,11 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   addDevice(): void {
-    this.alertService.success('Add Device');
-    // this.openDialog('add', undefined);
+    // this.alertService.success('Add Device');
+    this.openDialog('add');
   }
 
-  openDialog(action: string, device?: Device) {
+  openDialog(action: string, device: Device | undefined = undefined) {
     const dialogRef = this.dialog.open(AddDeviceDialogComponent, {
       width: '500px',
       data: {
