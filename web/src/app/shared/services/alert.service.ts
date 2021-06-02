@@ -14,21 +14,27 @@ export class AlertService {
 
   openSnackBar(alertData: AlertData) {
     // this._snackBar.open(alertData.message, alertData.action);
-
     this._snackBar.openFromComponent(AlertSnackBarComponent, {
       data: alertData,
-      horizontalPosition: 'right',
-      verticalPosition: 'bottom',
+      duration: 3000,
+      // horizontalPosition: 'right',
+      // verticalPosition: 'bottom',
     });
   }
 
-  success(message: string = 'Success!', action: string = 'Close') {
-    const alertData = new AlertData(message, action);
+  success(message = 'Success') {
+    const icon = 'check_circle_outline';
+    const style = { color: 'green' }
+    const alertData = new AlertData(message, icon, style);
+
     this.openSnackBar(alertData);
   }
 
-  error(message: string = 'Failed!', action: string = 'Close') {
-    const alertData = new AlertData(message, action);
+  error(message = 'Failed') {
+    const icon = 'cancel';
+    const style = { color: 'red' };
+    const alertData = new AlertData(message, icon, style);
+
     this.openSnackBar(alertData);
   }
 }

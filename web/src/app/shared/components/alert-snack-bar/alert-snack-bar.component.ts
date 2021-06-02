@@ -8,13 +8,16 @@ import { AlertData } from '@app/shared/models/alert-data';
   styleUrls: ['./alert-snack-bar.component.scss']
 })
 export class AlertSnackBarComponent implements OnInit {
-
   constructor(
     private _snackBar: MatSnackBar,
-    @Inject(MAT_SNACK_BAR_DATA) private data: AlertData,
+    @Inject(MAT_SNACK_BAR_DATA) public data: AlertData,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  getIconStyle() {
+    return this.data.style;
   }
 
   closeSnackBar() {

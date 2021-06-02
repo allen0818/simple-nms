@@ -1,9 +1,11 @@
 export class AlertData {
+  icon: string;
   message: string;
-  action: string;
+  style: object;
 
-  constructor(msg: string, action: string = 'close') {
+  constructor(msg: string, icon: string, style: object) {
     this.message = msg;
-    this.action = action;
+    this.icon = icon;
+    this.style = style;
   }
 }

@@ -1,6 +1,4 @@
-<div fxLayout="row">
-  <span fxFlex>訊息內容</span>
-  <button fxFlex mat-icon-button (click)="closeSnackBar()">
-    <mat-icon align="right">cancel</mat-icon>
-  </button>
+<div fxLayout="row" fxLayoutGap="10px" class="vertical-center">
+  <mat-icon [ngStyle]="getIconStyle()">{{ data.icon }}</mat-icon>
+  <span>{{ data.message }}</span>
 </div>
