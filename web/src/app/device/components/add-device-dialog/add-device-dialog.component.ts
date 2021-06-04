@@ -39,6 +39,7 @@ export class AddDeviceDialogComponent implements OnInit {
 
     if (typeof(this.dialogData.device) != 'undefined') {
       this.device = this.dialogData.device;
+      console.log('current device', this.device);
     }
   }
 
@@ -49,7 +50,8 @@ export class AddDeviceDialogComponent implements OnInit {
   initForm(): void {
     this.deviceForm = this.formBuilder.group({
       deviceName: [this.device.name, Validators.required],
-      deviceIp: [this.device.ip, [Validators.required]]
+      deviceIp: [this.device.ip, [Validators.required]],
+      deviceModel: [this.device.model]
     });
   }
 
@@ -63,6 +65,8 @@ export class AddDeviceDialogComponent implements OnInit {
     const newDevice = new Device();
     newDevice.name = formData.deviceName.value;
     newDevice.ip = formData.deviceIp.value;
+    newDevice.model = formData.deviceModel.value ?? 'Unknown';
+    newDevice.state = 'Linkdown';
 
     if (this.isAddDevice) {
       this.addDevice(newDevice);
@@ -73,21 +77,21 @@ export class AddDeviceDialogComponent implements OnInit {
   }
 
   addDevice(device: Device) {
-    this.deviceService.create(device).subscribe(result => {
-      this.alertService.success(`add device ${device.name} success.`);
+    this.deviceService.create(device).subscribe(_ => {
+      this.alertService.success(`Add device ${device.name} success.`);
       this.closeDialog(true);
     }, err => {
-      this.alertService.error(`add device ${device.name} failed.`);
+      this.alertService.error(`Add device ${device.name} failed.`);
       console.error(err);
     });
   }
 
   editDevice(device: Device) {
-    this.deviceService.update(device).subscribe(result => {
-      console.log(`update device ${device.name} success.`);
+    this.deviceService.update(device).subscribe(_ => {
+      console.log(`Update device ${device.name} success.`);
       this.closeDialog(true);
     }, err => {
-      console.error(`update device ${device.name} failed.`);
+      console.error(`Update device ${device.name} failed.`);
       console.error(err);
     });
   }

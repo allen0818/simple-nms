@@ -5,7 +5,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 
 import { Device } from '../models/device';
 
-const baseUrl = '/api/v1/devices/';
+const baseUrl = '/api/v1/devices';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -41,14 +41,14 @@ export class DeviceService {
   }
 
   create(device: Device): Observable<Device> {
-    return this.http.post<Device>(baseUrl, device, httpOptions).pipe(
+    return this.http.post<Device>(`${baseUrl}/`, device, httpOptions).pipe(
       tap((newDevice: Device) => console.log(`create device id=${newDevice.id}`)),
       catchError(this.handleError<Device>(`createDevice`))
     )
   }
 
   update(device: Device): Observable<Device> {
-    return this.http.put<Device>(baseUrl, device).pipe(
+    return this.http.put<Device>(`${baseUrl}/`, device).pipe(
       tap(_ => console.log(`create device id=${device.id}`)),
       catchError(this.handleError<Device>(`updateDevice`))
     )

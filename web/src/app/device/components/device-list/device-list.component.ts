@@ -10,16 +10,11 @@ import { AlertService } from '@app/shared/services/alert.service';
 import { AddDeviceDialogComponent } from '../add-device-dialog/add-device-dialog.component';
 
 const FAKE_DEVICE: Device[] = [
-  { id: 1, name: 'device1', ip: '192.168.10.1', state: 'linkup' },
-  { id: 2, name: 'device2', ip: '192.168.10.2', state: 'linkup' },
-  { id: 3, name: 'device3', ip: '192.168.10.3', state: 'linkdown' },
-  { id: 4, name: 'device4', ip: '192.168.10.4', state: 'linkdown' },
-  { id: 5, name: 'device5', ip: '192.168.10.5', state: 'linkup' },
-  { id: 6, name: 'device6', ip: '192.168.10.6', state: 'linkup' },
-  { id: 7, name: 'device7', ip: '192.168.10.7', state: 'linkup' },
-  { id: 8, name: 'device8', ip: '192.168.10.8', state: 'linkdown' },
-  { id: 9, name: 'device9', ip: '192.168.10.9', state: 'linkdown' },
-  { id: 10, name: 'device10', ip: '192.168.10.10', state: 'linkdown' },
+  { id: 1, name: 'device1', ip: '192.168.10.1', model: 'unknown', state: 'linkup' },
+  { id: 2, name: 'device2', ip: '192.168.10.2', model: 'unknown', state: 'linkup' },
+  { id: 3, name: 'device3', ip: '192.168.10.3', model: 'unknown', state: 'linkdown' },
+  { id: 4, name: 'device4', ip: '192.168.10.4', model: 'unknown', state: 'linkdown' },
+  { id: 5, name: 'device5', ip: '192.168.10.5', model: 'unknown', state: 'linkup' },
 ]
 
 @Component({
@@ -52,11 +47,11 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this.getAllDevices();
   }
 
   loadData() {
-    this.dataSource.data = FAKE_DEVICE;
+    this.dataSource.data = this.devices;
   }
 
   applyFilter(event: Event) {
@@ -81,29 +76,36 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   deleteDevice(id: number): void {
-    this.deviceService.delete(id).subscribe(result => {
-      if (result) {
-        console.log('device is deleted !');
-        this.devices = this.devices.filter(d => d.id != id)
-      } else {
-        console.log('failed to delete device.');
+    this.deviceService.delete(id).subscribe(
+      result => {
+        this.alertService.success('Deleted !');
+        this.devices = this.devices.filter(d => d.id != id);
+        this.loadData();
+      }, err => {
+        this.alertService.error('Failed !');
       }
-    })
+    );
   }
 
-  edit(device: Device): void {
-    console.log('edit device', device);
-  }
 
-  delete(id: number): void {
-    console.log(`delete device id:${id}`);
-  }
+  // deleteDevice(id: number): void {
+  //   this.deviceService.delete(id).subscribe(result => {
+  //     if (result) {
+  //       this.alertService.success('Deleted !');
+  //       this.devices = this.devices.filter(d => d.id != id)
+  //     } else {
+  //       this.alertService.error('Failed !');
+  //     }
+  //   })
+  // }
 
   addDevice(): void {
-    // this.alertService.success('Add Device');
     this.openDialog('add');
+  }
+
+  editDevice(device: Device): void {
+    this.openDialog('edit', device);
   }
 
   openDialog(action: string, device: Device | undefined = undefined) {
