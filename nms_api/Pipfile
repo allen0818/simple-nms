@@ -11,6 +11,7 @@ djangorestframework = "*"
 python-dotenv = "*"
 drf-yasg = "*"
 psycopg2-binary = "*"
+celery = "*"
 
 [requires]
 python_version = "3.7"

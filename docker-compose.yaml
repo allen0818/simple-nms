@@ -26,6 +26,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     networks:
       - proxy
 
@@ -35,6 +36,14 @@ services:
     container_name: 'nms-web'
     ports:
       - 3000:80
+    networks:
+      - proxy
+
+  redis:
+    container_name: 'nms-redis'
+    image: redis
+    ports:
+      - "6379:6379"
     networks:
       - proxy
 

@@ -91,11 +91,11 @@ WSGI_APPLICATION = 'nms_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST', '172.16.100.201'),
+        'HOST': os.environ.get('DB_HOST', '172.18.50.131'),
         'PORT': os.environ.get('DB_HOST_PORT', '5432'),
         'NAME': os.environ.get('DB_NAME', 'nms_db'),
         'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'REPLACE_TO_YOURS'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'p@ssw0rd'),
     }
 }
 
@@ -137,3 +137,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Celery (not confirmed yet)
+CELLERY_REDIS_IP = os.environ.get("SERVER_IP", "172.18.50.131")
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Taipei'
+CELERY_BROKER_URL = 'redis://{}:6379'.format(CELLERY_REDIS_IP)
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
