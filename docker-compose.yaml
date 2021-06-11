@@ -30,20 +30,36 @@ services:
     networks:
       - proxy
 
-  web:
-    image: nms-web:1.0.0
-    build: './web'
-    container_name: 'nms-web'
-    ports:
-      - 3000:80
+  celery:
+    build: ./nms_api
+    image: my_nms_api:1.0.0
+    container_name: 'nms-celery'
+    command: bash -c "python manage.py migrate && celery -A nms_api worker -l info"
+    restart: always
+    env_file: './.env'
+    volumes:
+      - api_data:/api
+    depends_on:
+      - db
+      - redis
     networks:
       - proxy
+
 
   redis:
     container_name: 'nms-redis'
     image: redis
     ports:
       - "6379:6379"
+    networks:
+      - proxy
+
+  web:
+    image: nms-web:1.0.0
+    build: './web'
+    container_name: 'nms-web'
+    ports:
+      - 3000:80
     networks:
       - proxy
 
