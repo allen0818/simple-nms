@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'nms_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST', '172.18.50.131'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_HOST_PORT', '5432'),
         'NAME': os.environ.get('DB_NAME', 'nms_db'),
         'USER': os.environ.get('DB_USER', 'postgres'),
@@ -140,7 +140,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Celery (not confirmed yet)
-CELLERY_REDIS_IP = os.environ.get("SERVER_IP", "172.18.50.131")
+CELLERY_REDIS_IP = os.environ.get("SERVER_IP", "redis")
 
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
