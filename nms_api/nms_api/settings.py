@@ -147,5 +147,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Taipei'
 CELERY_BROKER_URL = 'redis://{}:6379'.format(CELLERY_REDIS_IP)
-# CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(CELLERY_REDIS_IP) # 'django-db'
+
 # CELERY_CACHE_BACKEND = 'django-cache'

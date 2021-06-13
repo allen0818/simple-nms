@@ -3,9 +3,10 @@ services:
   db:
     image: my_postgres:1.0.0
     container_name: 'nms-db'
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file: './.env'
+    # environment:
+    #   POSTGRES_USER: ${DB_USER}
+    #   POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +22,7 @@ services:
     restart: always
     env_file: './.env'
     volumes:
-      - api_data:/api
+      - ./nms_api:/api
     ports:
       - "8000:8000"
     depends_on:
@@ -34,17 +35,16 @@ services:
     build: ./nms_api
     image: my_nms_api:1.0.0
     container_name: 'nms-celery'
-    command: bash -c "python manage.py migrate && celery -A nms_api worker -l info"
+    command: bash -c "celery -A nms_api worker -l info"
     restart: always
     env_file: './.env'
     volumes:
-      - api_data:/api
+      - ./nms_api:/api
     depends_on:
       - db
       - redis
     networks:
       - proxy
-
 
   redis:
     container_name: 'nms-redis'
@@ -66,9 +66,10 @@ services:
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    env_file: './.env'
+    # environment:
+    #   PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+    #   PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     volumes:
       - pgadmin:/root/.pgadmin
     ports:
@@ -78,7 +79,6 @@ services:
     restart: always
 
 volumes:
-  api_data:
   pgdata:
   pgadmin:
 

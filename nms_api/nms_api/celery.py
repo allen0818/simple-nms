@@ -19,3 +19,15 @@ app.autodiscover_tasks()
 @app.task(bind=True)
 def debug_task(self):
     print(f'Request: {self.request!r}')
+
+@app.task(bind=True)
+def dump_context(self, x, y):
+    print('Executing task id {0.id}, args: {0.args!r} kwargs: {0.kwargs!r}'.format(
+            self.request))
+
+# def add_custom_task():
+#     from devices.tasks import add
+#     add.delay(3, 5)
+
+# add_custom_task()
+# debug_task.delay()
