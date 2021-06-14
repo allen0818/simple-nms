@@ -11,6 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
+    restart: always
     networks:
       - proxy
 
@@ -32,7 +33,6 @@ services:
       - proxy
 
   celery:
-    build: ./nms_api
     image: my_nms_api:1.0.0
     container_name: 'nms-celery'
     command: bash -c "celery -A nms_api worker -l info"
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./nms_api:/api
     depends_on:
-      - db
+      - api
       - redis
     networks:
       - proxy
@@ -51,6 +51,7 @@ services:
     image: redis
     ports:
       - "6379:6379"
+    restart: always  
     networks:
       - proxy
 
@@ -60,6 +61,7 @@ services:
     container_name: 'nms-web'
     ports:
       - 3000:80
+    restart: always  
     networks:
       - proxy
 
