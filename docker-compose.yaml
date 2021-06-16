@@ -46,12 +46,26 @@ services:
     networks:
       - proxy
 
+  celery-beat:
+    image: my_nms_api:1.0.0
+    container_name: 'nms-celery-beat'
+    command: bash -c "celery -A nms_api beat -l info"
+    restart: always
+    env_file: './.env'
+    volumes:
+      - ./nms_api:/api
+    depends_on:
+      - api
+      - redis
+    networks:
+      - proxy
+
   redis:
     container_name: 'nms-redis'
     image: redis
     ports:
       - "6379:6379"
-    restart: always  
+    restart: always
     networks:
       - proxy
 
@@ -61,7 +75,7 @@ services:
     container_name: 'nms-web'
     ports:
       - 3000:80
-    restart: always  
+    restart: always
     networks:
       - proxy
 

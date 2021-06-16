@@ -4,7 +4,7 @@ import time
 @shared_task
 def get_status(msg):
     print('worker: get status {}'.format(msg))
-    time.sleep(20)
+    # time.sleep(20)
     return 'ok la'
 
 # @app.task(bind=True)

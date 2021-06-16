@@ -15,15 +15,28 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Calls test('hello') every 10 seconds.
+    sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
+
+    # Calls test('world') every 30 seconds
+    sender.add_periodic_task(30.0, test.s('world'), expires=10)
+
+    # # Executes every Monday morning at 7:30 a.m.
+    # sender.add_periodic_task(
+    #     crontab(hour=7, minute=30, day_of_week=1),
+    #     test.s('Happy Mondays!'),
+    # )
+
 
 @app.task(bind=True)
 def debug_task(self):
     print(f'Request: {self.request!r}')
 
 @app.task(bind=True)
-def dump_context(self, x, y):
-    print('Executing task id {0.id}, args: {0.args!r} kwargs: {0.kwargs!r}'.format(
-            self.request))
+def test(self, msg):
+    print(msg)
 
 # def add_custom_task():
 #     from devices.tasks import add
