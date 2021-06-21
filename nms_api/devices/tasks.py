@@ -1,10 +1,15 @@
-from celery import shared_task
 import time
+from celery import shared_task
+from .utils import get_all_devices
 
 @shared_task
-def get_status(msg):
+def get_status(msg=None):
     print('worker: get status {}'.format(msg))
     # time.sleep(20)
+    device_list = get_all_devices()
+    for device in device_list:
+        r = device.snmp_get('1.3.6.1.2.1.1.2.0')
+
     return 'ok la'
 
 # @app.task(bind=True)
