@@ -31,7 +31,15 @@ class Device(models.Model):
             # 之後要根據設定，選擇用 SNMPv1v2 或 SNMPv3
             logger.info('Send snmp-get to {}:{}'.format(ip, port))
             iterator = snmp.SnmpV1V2().get_request(ip, port, community, oid, timeout, retries)
-            return iterator
+
+            errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
+            if errorIndication or errorStatus:
+                logger.error('SNMP-GET failed.')
+                return None
+            else:
+                name, val = varBinds[0]
+                return None if val is None else str(val)
+
         except Exception as e:
             logger.warning("Snmp get error.")
             raise e
@@ -44,7 +52,20 @@ class Device(models.Model):
         try:
             # 之後要根據設定，選擇用 SNMPv1v2 或 SNMPv3
             iterator = snmp.SnmpV1V2().set_request(ip, port, community, oid, value, timeout, retries)
-            return iterator
+
+            errorIndication, errorStatus, errorIndex, varBinds = next(iterator)
+            if errorIndication or errorStatus:
+                logger.error('SNMP-SET failed.')
+                return None
+            else:
+                name, val = varBinds[0]
+                return None if val is None else str(val)
+
         except Exception as e:
             logger.warning("Snmp set error.")
             raise e
+
+    def update_link_status(self):
+        logger.info("Update device {}'s link status.".format(self.name))
+        r = self.snmp_get("1.3.6.1.2.1.1.2.0")
+        logger.info('result: {}'.format(r))

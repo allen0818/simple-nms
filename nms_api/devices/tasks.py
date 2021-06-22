@@ -1,14 +1,20 @@
 import time
+import logging
+
 from celery import shared_task
 from .utils import get_all_devices
+
+logger = logging.getLogger(__name__)
 
 @shared_task
 def get_status(msg=None):
     print('worker: get status {}'.format(msg))
     # time.sleep(20)
     device_list = get_all_devices()
-    for device in device_list:
-        r = device.snmp_get('1.3.6.1.2.1.1.2.0')
+    logger.info("device's count: {}".format(len(device_list)))
+
+    for d in device_list:
+        d.update_link_status()
 
     return 'ok la'
 
