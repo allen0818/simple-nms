@@ -1,5 +1,8 @@
 from django.db import models
 from devices import snmp
+from devices.mibs import mib2
+from .enums import LinkStatus
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -67,5 +70,21 @@ class Device(models.Model):
 
     def update_link_status(self):
         logger.info("Update device {}'s link status.".format(self.name))
-        r = self.snmp_get("1.3.6.1.2.1.1.2.0")
-        logger.info('result: {}'.format(r))
+
+        try:
+            r = self.snmp_get(mib2.SYS_OBJECT_ID)
+
+            # 之後要補上自動判斷型號
+
+            # 更新 link 狀態
+            linkStatusEnum = LinkStatus.LINKDOWN if r is None else LinkStatus.LINKUP
+
+            if self.state != linkStatusEnum:
+                self.state = linkStatusEnum.value
+                self.save()
+
+            logger.info('current state: {}'.format(self.state))
+
+        except Exception as e:
+            logger.error("Failed to update device {}'s link status.")
+            logger.error(e)
