@@ -7,6 +7,15 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+class DeviceModel(models.Model):
+    oid = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "device_model"
+
+    def __str__(self):
+        return "Model ({})".format(self.name)
 
 # Create your models here.
 class Device(models.Model):
@@ -24,6 +33,9 @@ class Device(models.Model):
 
     class Meta:
         db_table = "device"
+
+    def __str__(self):
+        return "Device ({}/{})".format(self.name, self.ip)
 
     def snmp_get(self, oid, timeout=None, retries=None):
         ip = self.ip
@@ -74,7 +86,10 @@ class Device(models.Model):
         try:
             r = self.snmp_get(mib2.SYS_OBJECT_ID)
 
-            # 之後要補上自動判斷型號
+            # 自動判斷型號
+            logger.info('sysObjectId: {}'.format(r))
+            modelname = self.get_model_name(r)
+            logger.info('modelName: {}'.format(modelname))
 
             # 更新 link 狀態
             linkStatusEnum = LinkStatus.LINKDOWN if r is None else LinkStatus.LINKUP
@@ -88,3 +103,23 @@ class Device(models.Model):
         except Exception as e:
             logger.error("Failed to update device {}'s link status.")
             logger.error(e)
+
+    def get_model_name(self, model_name_oid):
+        if model_name_oid is None: return 'Unknown'
+
+        from .utils import get_model_by_oid
+
+        oid_tokens = str(model_name_oid).split('.')
+        if len(oid_tokens) >= 8 and oid_tokens[6] == "5843":
+            # flc device
+            model_oid = oid_tokens[7] # project oid
+            find_model = get_model_by_oid(model_oid)
+
+            if find_model is not None:
+                self.model = find_model.name # 之後改成存 foreign object
+                self.save()
+
+            return find_model
+        else:
+            # general device
+            return self.snmp_get("{}.0".format(model_name_oid))
