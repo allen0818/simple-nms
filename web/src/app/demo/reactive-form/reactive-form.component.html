@@ -1,0 +1,47 @@
+<form [formGroup]='heroForm' (ngSubmit)='submit()'>
+  <div class="form-group">
+    <label for="name">姓名：</label>
+    <input type="text" id="name" formControlName="name" class="form-control" autocomplete="off" required>
+
+    <!--
+      在用戶有改動數據 or 訪問控件之後才對數據的有效性進行驗證
+    -->
+    <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+      <div *ngIf="name?.errors?.required">
+        姓名不能為空
+      </div>
+      <div *ngIf="name?.errors?.minlength">
+        姓名信息不能少於 4 個字符長度
+      </div>
+      <div *ngIf="name?.errors?.nameInvalid">
+        姓名無效
+      </div>
+    </div>
+
+  </div>
+  <div class="form-group">
+    <label for="name">年齡：</label>
+    <input type="number" id="age" formControlName="age" class="form-control" autocomplete="off" required step="1"
+      min="1" max="100">
+  </div>
+
+  <div formGroupName='address'>
+    <div class="form-group">
+      <label for="city">市：</label>
+      <input type="text" id="city" formControlName='city' class="form-control" autocomplete="off" required>
+    </div>
+    <div class="form-group">
+      <label for="district">區：</label>
+      <input type="text" id="district" formControlName='district' class="form-control" autocomplete="off" required>
+    </div>
+    <div class="form-group">
+      <label for="street">街道：</label>
+      <input type="text" id="street" formControlName='street' class="form-control" autocomplete="off" required>
+    </div>
+  </div>
+
+</form>
+
+<div>
+  Form 的內容值： {{ heroForm.value | json }}
+</div>

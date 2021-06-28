@@ -6,10 +6,11 @@ import { DemoRoutingModule } from './demo-routing.module';
 import { DemoEntryComponent } from './demo-entry/demo-entry.component';
 import { DemoIconComponent } from './demo-icon/demo-icon.component';
 import { TemplateFormComponent } from './template-form/template-form.component';
+import { ReactiveFormComponent } from './reactive-form/reactive-form.component';
 
 
 @NgModule({
-  declarations: [DemoEntryComponent, DemoIconComponent, TemplateFormComponent],
+  declarations: [DemoEntryComponent, DemoIconComponent, TemplateFormComponent, ReactiveFormComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -4,7 +4,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { AlertSnackBarComponent } from './components/alert-snack-bar/alert-snack-bar.component';
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ConfirmDialogComponent, AlertSnackBarComponent],
@@ -12,12 +12,14 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     SharedMaterialModule,
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     SharedMaterialModule,
     FlexLayoutModule,
     FormsModule,
+    ReactiveFormsModule,
 
     ConfirmDialogComponent,
   ]
