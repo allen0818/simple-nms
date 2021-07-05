@@ -8,6 +8,8 @@ import { Device } from '@app/device/models/device';
 import { DeviceService } from '@app/device/services/device.service';
 import { AlertService } from '@app/shared/services/alert.service';
 import { AddDeviceDialogComponent } from '../add-device-dialog/add-device-dialog.component';
+import { Router } from '@angular/router';
+
 
 const FAKE_DEVICE: Device[] = [
   { id: 1, name: 'device1', ip: '192.168.10.1', model: 'unknown', state: 'linkup' },
@@ -38,7 +40,8 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   constructor(
     private deviceService: DeviceService,
     private alertService: AlertService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
   ) { }
 
   ngAfterViewInit(): void {
@@ -105,7 +108,8 @@ export class DeviceListComponent implements OnInit, AfterViewInit {
   }
 
   editDevice(device: Device): void {
-    this.openDialog('edit', device);
+    // this.openDialog('edit', device);
+    this.router.navigate(['home', 'devices', `${device.id}`]);
   }
 
   openDialog(action: string, device: Device | undefined = undefined) {
