@@ -11,21 +11,22 @@ import { DeviceService } from '@app/device/services/device.service';
 export class DeviceDetailComponent implements OnInit {
   name = 'fake'; // get from db later.
 
-  addressForm = this.fb.group({
-    company: null,
-    firstName: [null, Validators.required],
-    lastName: [null, Validators.required],
-    address: [null, Validators.required],
-    address2: null,
-    city: [null, Validators.required],
-    state: [null, Validators.required],
-    postalCode: [null, Validators.compose([
-      Validators.required, Validators.minLength(5), Validators.maxLength(5)])
-    ],
-    shipping: ['free', Validators.required]
-  });
+  deviceForm = this.fb.group({
 
-  hasUnitNumber = false;
+    name: [null, Validators.required],
+    ipAddress: [null, Validators.required],
+
+    model: [null, Validators.required],
+    group: [null, Validators.required],
+
+    snmpPort: [null, Validators.compose([
+      Validators.required])
+    ],
+    snmpGetComm: [null, Validators.required],
+    snmpSetComm: [null, Validators.required],
+
+    description: null,
+  });
 
   states = [
     {name: 'Alabama', abbreviation: 'AL'},
